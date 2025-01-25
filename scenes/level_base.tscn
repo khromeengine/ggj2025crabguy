@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=3 uid="uid://m1wq40g6r6a0"]
+
+[ext_resource type="Script" path="res://scripts/level_base.gd" id="1_07ps8"]
+[ext_resource type="Texture2D" uid="uid://bw4fyy4qpurnt" path="res://assets/phsprites/phtile.png" id="2_7ua3u"]
+[ext_resource type="Texture2D" uid="uid://qkvxiyfwkmj3" path="res://assets/phsprites/phdie.png" id="3_lq7cf"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0tk54"]
+texture = ExtResource("2_7ua3u")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, 16, -16, -16, 16, -16, 16, 16)
+1:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2cwbl"]
+texture = ExtResource("3_lq7cf")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, 16, 2.75, -16, 16, 16)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, 3, -16, 16)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(16, -16, -16, -3.75, 16, 16)
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, -3.5, 16)
+
+[sub_resource type="TileSet" id="TileSet_ow4ln"]
+tile_size = Vector2i(32, 32)
+physics_layer_0/collision_layer = 1
+physics_layer_1/collision_layer = 2
+physics_layer_1/collision_mask = 2
+sources/0 = SubResource("TileSetAtlasSource_0tk54")
+sources/1 = SubResource("TileSetAtlasSource_2cwbl")
+
+[node name="LevelBase" type="Node2D"]
+script = ExtResource("1_07ps8")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_set = SubResource("TileSet_ow4ln")

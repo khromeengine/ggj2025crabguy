@@ -1,4 +1,5 @@
 extends CharacterBody2D
+class_name Player
 
 @export var acceleration: float = 3000.0
 @export var max_speed: float = 1000.0
@@ -35,12 +36,14 @@ var _dead: bool = false
 
 
 func _ready():
+	GameStateManager.player = self
 	_coyote_jump_timer = Timer.new()
 	_coyote_jump_timer.autostart = false
 	_coyote_jump_timer.one_shot = true
 	_coyote_jump_timer.timeout.connect(_on_coyote_timeout)
 	add_child(_coyote_jump_timer)
 	hurtbox.kill_owner.connect(kill)
+	GameStateManager.reload_level.connect(_on_reload_level)
 
 
 func _physics_process(delta): 
@@ -94,6 +97,9 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("debug"):
 		kill()
 	
+	if Input.is_action_just_pressed("reset"):
+		GameStateManager.reload_level.emit()
+	
 	move_and_slide()
 
 
@@ -106,6 +112,16 @@ func kill():
 		anim_player.play("die")
 		collisionbox.set_deferred("disabled", true)
 	
+
+func unkill():
+	if _dead:
+		_noctrl = false
+		_dead = false
+		velocity = Vector2.ZERO
+		reset_move_mod()
+		collisionbox.set_deferred("disabled", false)
+		anim_player.play("RESET")
+
 
 func set_gravity(lmao: float):
 	if _bubbling:
@@ -176,3 +192,7 @@ func _on_coyote_timeout():
 	if _jump_count > 0:
 		_jump_count -= 1
 	set_speed_mod(0.3)
+
+
+func _on_reload_level():
+	unkill()
