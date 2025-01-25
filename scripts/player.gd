@@ -21,11 +21,17 @@ var _max_speed_mod: float = 1.0
 var _bubbling: bool = false
 var _bubbles: int = 1
 
-var _jump_count: int = 1
+var _jump_count: int = 0
 var _coyote_jump_timer: Timer
+
+var _noctrl: bool = false
+var _dead: bool = false
 
 @onready var crab_sprite: Sprite2D = $CrabSprite
 @onready var bubble_sprite: Sprite2D = $BubbleSprite
+@onready var anim_player: AnimationPlayer = $AnimationPlayer
+@onready var hurtbox: Hurtbox = $Hurtbox
+@onready var collisionbox: CollisionShape2D = $CollisionShape2D
 
 
 func _ready():
@@ -34,7 +40,7 @@ func _ready():
 	_coyote_jump_timer.one_shot = true
 	_coyote_jump_timer.timeout.connect(_on_coyote_timeout)
 	add_child(_coyote_jump_timer)
-
+	hurtbox.kill_owner.connect(kill)
 
 
 func _physics_process(delta): 
@@ -42,21 +48,7 @@ func _physics_process(delta):
 	var working_accel: float = clampf(lerpf(0, acceleration, (max_speed - abs(velocity.x))/max_speed),
 		 0.2 * acceleration, acceleration)
 	
-	if x_dir > 0:
-		velocity.x += clampf(working_accel * _speed_mod * delta, 0, (max_speed * _max_speed_mod - velocity.x) )
-		crab_sprite.flip_h = false
-	elif x_dir < 0:
-		velocity.x += clampf(-working_accel * _speed_mod * delta, (-max_speed * _max_speed_mod - velocity.x) , 0) 
-		crab_sprite.flip_h = true
-	
-	
-	if is_on_floor() and not _bubbling:
-		if velocity.x * x_dir <= 0:
-			velocity.x -= (velocity.x * friction * delta * 60)
-		_recover_jump()
-		_coyote_jump_timer.start(coyote_time)
-		reset_move_mod()
-	elif _bubbling:
+	if _bubbling or _dead:
 		if velocity.x * x_dir <= 0:
 			velocity.x -= (velocity.x * 0.02 * delta * 60)
 		else:
@@ -64,6 +56,12 @@ func _physics_process(delta):
 		set_speed_mod(0.2)
 		_max_speed_mod = 0.6
 		set_gravity(0.1)
+	elif is_on_floor() and not _bubbling:
+		if velocity.x * x_dir <= 0:
+			velocity.x -= (velocity.x * friction * delta * 60)
+		_recover_jump()
+		_coyote_jump_timer.start(coyote_time)
+		reset_move_mod()
 	elif not is_on_floor():
 		set_speed_mod(0.3)
 		
@@ -71,23 +69,43 @@ func _physics_process(delta):
 	
 	_apply_gravity()
 	
-	if Input.is_action_just_pressed("bubble"):
-		_try_bubble()
-		_bubbles -= 1
-	elif _bubbling and Input.is_action_just_pressed("jump"):
-		_try_bubble_jump()
-	elif Input.is_action_just_pressed("jump"):
-		_try_jump()
+	if not _noctrl:
+		if x_dir > 0:
+			velocity.x += clampf(working_accel * _speed_mod * delta, 0, (max_speed * _max_speed_mod - velocity.x) )
+			crab_sprite.flip_h = false
+		elif x_dir < 0:
+			velocity.x += clampf(-working_accel * _speed_mod * delta, (-max_speed * _max_speed_mod - velocity.x) , 0) 
+			crab_sprite.flip_h = true
+			
+		if Input.is_action_just_pressed("bubble"):
+			_try_bubble()
+			_bubbles -= 1
+		elif _bubbling and Input.is_action_just_pressed("jump"):
+			_try_bubble_jump()
+		elif Input.is_action_just_pressed("jump"):
+			_try_jump()
+			
+		if Input.is_action_just_released("bubble"):
+			_try_unbubble()
 		
-	if Input.is_action_just_released("bubble"):
-		_try_unbubble()
+		if Input.is_action_just_released("jump"):
+			_jump_gravity_mod = 0.0
 	
-	if Input.is_action_just_released("jump"):
-		_jump_gravity_mod = 0.0
-	
+	if Input.is_action_just_pressed("debug"):
+		kill()
 	
 	move_and_slide()
 
+
+func kill():
+	if not _dead:
+		_try_unbubble()
+		_noctrl = true
+		_dead = true
+		velocity.y = 0.0
+		anim_player.play("die")
+		collisionbox.set_deferred("disabled", true)
+	
 
 func set_gravity(lmao: float):
 	if _bubbling:
@@ -107,6 +125,8 @@ func reset_move_mod():
 
 
 func _apply_gravity(): 
+	if _dead:
+		return
 	if _bubbling:
 		velocity.y = clampf(velocity.y + get_gravity().y * _gravity_mod, -terminal_bubble_floating, INF)
 	else:
