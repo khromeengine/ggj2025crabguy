@@ -11,6 +11,7 @@ var respawn_point: Vector2 = Vector2.ZERO
 func _ready():
 	set_respawn_point.connect(_on_set_respawn_point)
 	reload_level.connect(_on_reload_level)
+	enter_exit.connect(_on_enter_exit)
 	
 	
 func _on_set_respawn_point(obj: Node2D):
@@ -23,4 +24,7 @@ func _on_reload_level():
 
 func _on_enter_exit(entrance, exit_id):
 	var offset = player.global_position - entrance
-	player.global_position = LevelManager.get_exit(exit_id).global_position + offset
+	var new_exit = LevelManager.get_exit(exit_id)
+	player.global_position = new_exit.global_position + offset
+	new_exit.active = false
+	

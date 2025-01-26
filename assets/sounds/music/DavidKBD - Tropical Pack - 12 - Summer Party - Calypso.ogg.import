@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dbpebcn7fwbb2"
+path="res://.godot/imported/DavidKBD - Tropical Pack - 12 - Summer Party - Calypso.ogg-d62512f6c86b4455f5188e21a42bf88f.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/sounds/music/DavidKBD - Tropical Pack - 12 - Summer Party - Calypso.ogg"
+dest_files=["res://.godot/imported/DavidKBD - Tropical Pack - 12 - Summer Party - Calypso.ogg-d62512f6c86b4455f5188e21a42bf88f.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

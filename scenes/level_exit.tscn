@@ -1,8 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://qqx05fp2owb1"]
+[gd_scene load_steps=3 format=3 uid="uid://qqx05fp2owb1"]
 
 [ext_resource type="Script" path="res://scripts/level_exit.gd" id="1_sh4fs"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yej7q"]
 
 [node name="LevelExit" type="Area2D"]
 collision_layer = 4
 collision_mask = 4
 script = ExtResource("1_sh4fs")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_yej7q")
+debug_color = Color(0.840448, 0.38314, 5.77569e-07, 0.42)

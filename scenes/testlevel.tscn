@@ -35,11 +35,6 @@ sources/1 = SubResource("TileSetAtlasSource_w5ipr")
 [node name="Player" parent="." instance=ExtResource("1_8oumq")]
 position = Vector2(478, 328)
 
-[node name="Camera2D" type="Camera2D" parent="Player"]
-zoom = Vector2(1.2, 1.2)
-position_smoothing_enabled = true
-position_smoothing_speed = 20.0
-
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 texture_filter = 3
 scale = Vector2(2, 2)

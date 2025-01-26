@@ -1,23 +1,22 @@
 extends Node2D
 class_name LevelBase
 
+const MAX_UNLOAD_COUNT := 1
+
 @export var id: int
 @export var exits: Array[LevelExit]
 @export var default_respawn: Node2D = self
 
+var active: bool = false
+var unload_count: int
 
 func _ready():
+	unload_count = MAX_UNLOAD_COUNT
 	for i in range(exits.size()):
 		exits[i].exit_id = i
-	LevelManager.entered_new_level.connect(_on_entered_new_level)
 	
 	
-func _on_entered_new_level(level: int, _exit: int):
-	var correct: bool = self.id == level
+func die():
+	queue_free()
 	
-	for exit in exits:
-			exit.set_deferred("monitoring", correct)
-			
-	if correct:
-		LevelManager.set_new_level(self)
-		GameStateManager.set_respawn_point.emit(default_respawn)
+	

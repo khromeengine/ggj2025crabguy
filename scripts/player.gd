@@ -1,7 +1,9 @@
 extends CharacterBody2D
 class_name Player
 
-@export var acceleration: float = 3000.0
+const BUBBLE_TIME: float = 6.0
+
+@export var acceleration: float = 2000.0
 @export var max_speed: float = 1000.0
 @export var friction: float = 0.16
 
@@ -25,6 +27,7 @@ var _bubbles: int = 1
 var _jump_count: int = 0
 var _coyote_jump_timer: Timer
 
+
 var _noctrl: bool = false
 var _dead: bool = false
 
@@ -33,6 +36,9 @@ var _dead: bool = false
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var hurtbox: Hurtbox = $Hurtbox
 @onready var collisionbox: CollisionShape2D = $CollisionShape2D
+@onready var bubble_timer: Timer = $BubbleTimer
+@onready var bubble_particles: PackedScene = preload("res://scenes/bubbleparticles.tscn")
+
 
 
 func _ready():
@@ -42,11 +48,16 @@ func _ready():
 	_coyote_jump_timer.one_shot = true
 	_coyote_jump_timer.timeout.connect(_on_coyote_timeout)
 	add_child(_coyote_jump_timer)
+	
+	bubble_timer.timeout.connect(_on_bubble_timeout)
+
 	hurtbox.kill_owner.connect(kill)
 	GameStateManager.reload_level.connect(_on_reload_level)
 
 
 func _physics_process(delta): 
+	_clear_animation_state()
+	
 	var x_dir: float = Input.get_action_strength("right") - Input.get_action_strength("left")
 	var working_accel: float = clampf(lerpf(0, acceleration, (max_speed - abs(velocity.x))/max_speed),
 		 0.2 * acceleration, acceleration)
@@ -76,13 +87,16 @@ func _physics_process(delta):
 		if x_dir > 0:
 			velocity.x += clampf(working_accel * _speed_mod * delta, 0, (max_speed * _max_speed_mod - velocity.x) )
 			crab_sprite.flip_h = false
+			if not $RunningSFX.playing and is_on_floor():
+				$RunningSFX.play(0.1*(abs(velocity.x)/max_speed))
 		elif x_dir < 0:
 			velocity.x += clampf(-working_accel * _speed_mod * delta, (-max_speed * _max_speed_mod - velocity.x) , 0) 
 			crab_sprite.flip_h = true
+			if not $RunningSFX.playing and is_on_floor():
+				$RunningSFX.play(0.1*(abs(velocity.x)/max_speed))
 			
 		if Input.is_action_just_pressed("bubble"):
 			_try_bubble()
-			_bubbles -= 1
 		elif _bubbling and Input.is_action_just_pressed("jump"):
 			_try_bubble_jump()
 		elif Input.is_action_just_pressed("jump"):
@@ -100,6 +114,15 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("reset"):
 		GameStateManager.reload_level.emit()
 	
+	
+	if is_on_floor() and abs(velocity.x) > max_speed/5:
+		$AnimationTree.set("parameters/conditions/running", true)
+	elif not is_on_floor():
+		$AnimationTree.set("parameters/conditions/falling", true)
+	else:
+		$AnimationTree.set("parameters/conditions/idle", true)
+	
+	
 	move_and_slide()
 
 
@@ -109,8 +132,11 @@ func kill():
 		_noctrl = true
 		_dead = true
 		velocity.y = 0.0
+		$AnimationTree.active = false
 		anim_player.play("die")
 		collisionbox.set_deferred("disabled", true)
+		hurtbox.set_deferred("monitorable", false)
+		$DeathSFX.play()
 	
 
 func unkill():
@@ -120,7 +146,10 @@ func unkill():
 		velocity = Vector2.ZERO
 		reset_move_mod()
 		collisionbox.set_deferred("disabled", false)
+		hurtbox.set_deferred("monitorable", true)
+		$AnimationTree.active = true
 		anim_player.play("RESET")
+		$RespawnSFX.play()
 
 
 func set_gravity(lmao: float):
@@ -154,6 +183,7 @@ func _try_jump():
 		_jump_gravity_mod = -0.6
 		velocity.y = -jump_speed
 		_jump_count -= 1
+		$JumpSFX.play()
 
 
 func _try_bubble_jump():
@@ -163,6 +193,8 @@ func _try_bubble_jump():
 	_jump_gravity_mod = -0.6
 	velocity.y = -jump_speed * 0.8
 	_max_speed_mod = 1.0
+	$PopSFX.play()
+	$JumpSFX.play()
 	
 
 func _recover_jump():
@@ -177,7 +209,11 @@ func _try_bubble():
 		_bubbling = true
 		bubble_sprite.visible = true
 		_bubbles -= 1
-		
+		bubble_timer.start(BUBBLE_TIME)
+		$BubbleSFX.play()
+		var particles = bubble_particles.instantiate()
+		particles.emitting = true
+		add_child(particles)
 		
 func _try_unbubble():
 	if _bubbling:
@@ -186,12 +222,23 @@ func _try_unbubble():
 		set_gravity(1.0)
 		set_speed_mod(1.0)
 		_max_speed_mod = 1.0
+		$PopSFX.play()
+
+
+func _clear_animation_state():
+	$AnimationTree.set("parameters/conditions/idle", false)
+	$AnimationTree.set("parameters/conditions/running", false)
+	$AnimationTree.set("parameters/conditions/falling", false)
 
 
 func _on_coyote_timeout():
 	if _jump_count > 0:
 		_jump_count -= 1
 	set_speed_mod(0.3)
+
+
+func _on_bubble_timeout():
+	_try_unbubble()
 
 
 func _on_reload_level():

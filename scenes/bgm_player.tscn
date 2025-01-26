@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://bp3exyucvvmxr"]
+
+[ext_resource type="AudioStream" uid="uid://3tkkaja371xd" path="res://assets/sounds/music/DavidKBD - Tropical Pack - 06 - Falling in Love - Bossanova.ogg" id="1_rpb1v"]
+[ext_resource type="AudioStream" uid="uid://bs1ieq8sggkq" path="res://assets/sounds/music/DavidKBD - Tropical Pack - 09 - Ukulele's Melancholy - Acoustic.ogg" id="2_cktic"]
+[ext_resource type="AudioStream" uid="uid://dbpebcn7fwbb2" path="res://assets/sounds/music/DavidKBD - Tropical Pack - 12 - Summer Party - Calypso.ogg" id="3_v6wgv"]
+
+[sub_resource type="AudioStreamPlaylist" id="AudioStreamPlaylist_jb8pk"]
+fade_time = 1.0
+stream_count = 3
+stream_0 = ExtResource("1_rpb1v")
+stream_1 = ExtResource("2_cktic")
+stream_2 = ExtResource("3_v6wgv")
+
+[node name="BgmPlayer" type="AudioStreamPlayer"]
+stream = SubResource("AudioStreamPlaylist_jb8pk")
+volume_db = -6.0
+autoplay = true
+bus = &"Music"
