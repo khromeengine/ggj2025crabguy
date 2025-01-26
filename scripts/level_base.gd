@@ -3,6 +3,7 @@ class_name LevelBase
 
 @export var id: int
 @export var exits: Array[LevelExit]
+@export var default_respawn: Node2D = self
 
 
 func _ready():
@@ -12,10 +13,11 @@ func _ready():
 	
 	
 func _on_entered_new_level(level: int, _exit: int):
-	if self.id == level:
+	var correct: bool = self.id == level
+	
+	for exit in exits:
+			exit.set_deferred("monitoring", correct)
+			
+	if correct:
 		LevelManager.set_new_level(self)
-		for exit in exits:
-			exit.set_deferred("monitoring", true)
-	else:
-		for exit in exits:
-			exit.set_deferred("monitoring", false)
+		GameStateManager.set_respawn_point.emit(default_respawn)

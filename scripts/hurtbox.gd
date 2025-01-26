@@ -7,5 +7,5 @@ func _ready():
 	body_entered.connect(on_body_entered)
 	
 	
-func on_body_entered(body: Node2D):
+func on_body_entered(_body: Node2D):
 	kill_owner.emit()
