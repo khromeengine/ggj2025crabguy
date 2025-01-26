@@ -2,12 +2,10 @@ extends Control
 
 @onready var start_button = $VBoxContainer/Start as Button
 @onready var exit_button = $VBoxContainer/Exit as Button
-@onready var bgm_music = preload("res://scenes/bgm_player.tscn")
 
 func _ready() -> void:
 	start_button.pressed.connect(_on_start_pressed)
 	exit_button.pressed.connect(_on_exit_pressed)
-	add_sibling.call_deferred(bgm_music.instantiate())
 	
 	
 	

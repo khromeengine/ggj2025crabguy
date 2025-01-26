@@ -6,6 +6,10 @@ const MAX_UNLOAD_COUNT := 1
 @export var id: int
 @export var exits: Array[LevelExit]
 @export var default_respawn: Node2D = self
+@export var default_camera: Camera2D = null
+@export var creation_position: Vector2 = Vector2.ZERO
+
+
 
 var active: bool = false
 var unload_count: int
