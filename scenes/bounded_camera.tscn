@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://bkj0qmgmqprm1"]
+
+[ext_resource type="Script" path="res://scripts/bounded_camera.gd" id="1_rkvxd"]
+
+[node name="BoundedCamera" type="Camera2D"]
+zoom = Vector2(3.39, 3.39)
+position_smoothing_enabled = true
+position_smoothing_speed = 20.0
+script = ExtResource("1_rkvxd")
+rectangle_bound = Vector2(400, 225)
+max_camera_size = Vector2(400, 200)
+no_scroll = null
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+scale = Vector2(1.00662, 1)
+color = Color(0.993457, 0.842835, 0.894381, 0.309804)
+polygon = PackedVector2Array(200, 112.5, -200, 112.5, -200, -112.5, 200, -112.5)
+
+[node name="CameraSize" type="Polygon2D" parent="."]
+color = Color(1, 0.290196, 1, 0.337255)
+polygon = PackedVector2Array(200, 100, -200, 100, -200, -100, 200, -100)

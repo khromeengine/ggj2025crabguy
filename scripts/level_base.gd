@@ -10,7 +10,6 @@ const MAX_UNLOAD_COUNT := 1
 @export var creation_position: Vector2 = Vector2.ZERO
 
 
-
 var active: bool = false
 var unload_count: int
 

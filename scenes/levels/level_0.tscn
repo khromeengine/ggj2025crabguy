@@ -1,18 +1,27 @@
-[gd_scene load_steps=3 format=4 uid="uid://c2djfsb7y83kf"]
+[gd_scene load_steps=4 format=4 uid="uid://c2djfsb7y83kf"]
 
 [ext_resource type="PackedScene" uid="uid://m1wq40g6r6a0" path="res://scenes/level_base.tscn" id="1_4bp20"]
 [ext_resource type="PackedScene" uid="uid://qqx05fp2owb1" path="res://scenes/level_exit.tscn" id="2_3jck3"]
+[ext_resource type="PackedScene" uid="uid://bkj0qmgmqprm1" path="res://scenes/bounded_camera.tscn" id="3_1t2v5"]
 
-[node name="LevelBase" node_paths=PackedStringArray("exits") instance=ExtResource("1_4bp20")]
+[node name="LevelBase" node_paths=PackedStringArray("exits", "default_camera") instance=ExtResource("1_4bp20")]
 position = Vector2(1, -1)
 exits = [NodePath("LevelExit")]
+default_camera = NodePath("BoundedCamera")
 
-[node name="TileMapLayer" parent="." index="0"]
+[node name="BoundedCamera" parent="." index="0" instance=ExtResource("3_1t2v5")]
+position = Vector2(43, -74)
+zoom = Vector2(1.356, 1.356)
+rectangle_bound = Vector2(1000, 600)
+max_camera_size = Vector2(2000, 600)
+no_scroll = false
+
+[node name="TileMapLayer" parent="." index="1"]
 tile_map_data = PackedByteArray("AAD0/wMAAgACAAEAAAD1/wMAAgADAAEAAAD2/wMAAgAEAAEAAAD3/wMAAgACAAEAAAD4/wMAAgADAAEAAAD5/wMAAgAEAAEAAAD6/wMAAgACAAEAAAD7/wMAAgADAAEAAAD8/wMAAgAEAAEAAAD9/wMAAgACAAEAAAD+/wMAAgADAAEAAAD//wMAAgAEAAEAAAAAAAMAAgACAAEAAAABAAMAAgADAAEAAAACAAMAAgAEAAEAAAADAAMAAgACAAEAAAAEAAMAAgADAAEAAAAFAAMAAgAEAAEAAAAGAAMAAgACAAEAAAAHAAMAAgADAAEAAAAIAAMAAgAEAAEAAAAJAAMAAgACAAEAAAAKAAMAAgADAAEAAAALAAMAAgAEAAEAAAAMAAMAAgACAAEAAAANAAMAAgADAAEAAAAOAAMAAgAEAAEAAADz/wMAAgABAAEAAAAPAAMAAgAFAAEAAAA=")
 
-[node name="RespawnPoint" parent="." index="1"]
+[node name="RespawnPoint" parent="." index="2"]
 position = Vector2(-143, 61)
 
-[node name="LevelExit" parent="." index="2" instance=ExtResource("2_3jck3")]
+[node name="LevelExit" parent="." index="3" instance=ExtResource("2_3jck3")]
 position = Vector2(446, 50)
 goto_level = 1

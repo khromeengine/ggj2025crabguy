@@ -264,8 +264,8 @@ debug_color = Color(0.912204, 0, 0.211491, 0.42)
 one_shot = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
+enabled = false
 zoom = Vector2(1.5, 1.5)
-position_smoothing_enabled = true
 position_smoothing_speed = 20.0
 
 [node name="BubbleSFX" type="AudioStreamPlayer2D" parent="."]
