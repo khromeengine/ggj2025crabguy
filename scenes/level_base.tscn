@@ -1,20 +1,21 @@
-[gd_scene load_steps=7 format=3 uid="uid://m1wq40g6r6a0"]
+[gd_scene load_steps=8 format=3 uid="uid://m1wq40g6r6a0"]
 
 [ext_resource type="Script" path="res://scripts/level_base.gd" id="1_07ps8"]
-[ext_resource type="Texture2D" uid="uid://qkvxiyfwkmj3" path="res://assets/phsprites/phdie.png" id="3_lq7cf"]
+[ext_resource type="Texture2D" uid="uid://dvjjy0i8lk78c" path="res://assets/spike.png" id="2_4i7kf"]
 [ext_resource type="Texture2D" uid="uid://d0kvai02h2t3y" path="res://assets/rock.png" id="4_fxfd2"]
+[ext_resource type="Texture2D" uid="uid://bbos7rv3oap0p" path="res://assets/checkpoint.png" id="4_kthy7"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2cwbl"]
-texture = ExtResource("3_lq7cf")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3weks"]
+texture = ExtResource("2_4i7kf")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, 16, 2.75, -16, 16, 16)
+0:0/0/physics_layer_1/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
 1:0/0 = 0
-1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, 3, -16, 16)
+1:0/0/physics_layer_1/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
 0:1/0 = 0
-0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(16, -16, -16, -3.75, 16, 16)
+0:1/0/physics_layer_1/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
 1:1/0 = 0
-1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, -3.5, 16)
+1:1/0/physics_layer_1/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wmkj3"]
 texture = ExtResource("4_fxfd2")
@@ -119,16 +120,42 @@ texture_region_size = Vector2i(32, 32)
 4:12/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, 16, -16, -16, 16, -16, 16, 16)
 4:13/0 = 0
 4:13/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, 16, -16, -16, 16, -16, 16, 16)
+8:3/0 = 0
+8:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+9:4/0 = 0
+9:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+9:3/0 = 0
+9:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+8:4/0 = 0
+8:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+11:3/0 = 0
+11:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(16, -16, 16, 16, -16, 16)
+11:3/0/physics_layer_0/polygon_1/points = PackedVector2Array(-16, 16, -16, -16, 16, -16)
+12:3/0 = 0
+12:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(16, -16, 16, 16, -16, 16)
+12:3/0/physics_layer_0/polygon_1/points = PackedVector2Array(-16, 16, -16, -16, 16, -16)
+12:4/0 = 0
+12:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(16, -16, 16, 16, -16, 16)
+12:4/0/physics_layer_0/polygon_1/points = PackedVector2Array(-16, 16, -16, -16, 16, -16)
+11:4/0 = 0
+11:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(16, -16, 16, 16, -16, 16)
+11:4/0/physics_layer_0/polygon_1/points = PackedVector2Array(-16, 16, -16, -16, 16, -16)
+3:6/0 = 0
+2:6/0 = 0
+1:7/0 = 0
+0:7/0 = 0
+1:6/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_ow4ln"]
 tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
 physics_layer_1/collision_layer = 2
 physics_layer_1/collision_mask = 2
-sources/1 = SubResource("TileSetAtlasSource_2cwbl")
 sources/2 = SubResource("TileSetAtlasSource_wmkj3")
+sources/0 = SubResource("TileSetAtlasSource_3weks")
 
 [node name="LevelBase" type="Node2D" node_paths=PackedStringArray("default_respawn")]
+texture_filter = 3
 script = ExtResource("1_07ps8")
 default_respawn = NodePath("RespawnPoint")
 
@@ -137,3 +164,9 @@ texture_filter = 3
 tile_set = SubResource("TileSet_ow4ln")
 
 [node name="RespawnPoint" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="RespawnPoint"]
+texture_filter = 3
+position = Vector2(0, -14)
+scale = Vector2(2, 2)
+texture = ExtResource("4_kthy7")

@@ -53,6 +53,7 @@ func _ready():
 
 	hurtbox.kill_owner.connect(kill)
 	GameStateManager.reload_level.connect(_on_reload_level)
+	GameStateManager.end_game.connect(_on_end_game)
 
 
 func _physics_process(delta): 
@@ -137,6 +138,7 @@ func kill():
 		collisionbox.set_deferred("disabled", true)
 		hurtbox.set_deferred("monitorable", false)
 		$DeathSFX.play()
+		GameStateManager.deded.emit()
 	
 
 func unkill():
@@ -243,3 +245,10 @@ func _on_bubble_timeout():
 
 func _on_reload_level():
 	unkill()
+
+
+func _on_end_game():
+	_noctrl = true
+	visible = false
+	$PopSFX.play()
+	$RespawnSFX.play()

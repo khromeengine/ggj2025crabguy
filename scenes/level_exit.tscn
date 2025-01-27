@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://scripts/level_exit.gd" id="1_sh4fs"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yej7q"]
+resource_local_to_scene = true
+size = Vector2(6.5, 111)
 
 [node name="LevelExit" type="Area2D"]
 collision_layer = 4

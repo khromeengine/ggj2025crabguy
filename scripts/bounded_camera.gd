@@ -44,6 +44,7 @@ func _ready() -> void:
 	if max_x_zoom > max_y_zoom:
 		_scroll_vert = true
 	zoom = Vector2(max_zoom, max_zoom)
+	$Control.scale = Vector2(1/max_zoom, 1/max_zoom)
 	
 	
 	_viewport_length = get_viewport_rect().size.x / zoom.x
@@ -53,7 +54,11 @@ func _ready() -> void:
 	
 	_half_rect_x = rectangle_bound.x / 2
 	_half_rect_y = rectangle_bound.y / 2
-
+	GameStateManager.reload_level.connect(_on_reload_level)
+	GameStateManager.deded.connect(_on_deded)
+	$DedTimer.timeout.connect(_on_ded_timer_timeout)
+	
+	
 	
 func _physics_process(delta):
 	if Engine.is_editor_hint():
@@ -81,3 +86,17 @@ func follow_tgt():
 		global_position.y = clampf(tgtpos.y, _anchor.y - _half_rect_y + _half_vp_height, _anchor.y + _half_rect_y - _half_vp_height)
 	if _anchor.x - _half_rect_x + _half_vp_length < _anchor.x + _half_rect_x - _half_vp_length:
 		global_position.x = clampf(tgtpos.x, _anchor.x - _half_rect_x + _half_vp_length, _anchor.x + _half_rect_x - _half_vp_length)
+
+
+func _on_reload_level():
+	$AnimationPlayer.play("out")
+	$DedTimer.stop()
+
+
+func _on_deded():
+	$DedTimer.start()
+
+
+func _on_ded_timer_timeout():
+	$Control.visible = true
+	$AnimationPlayer.play("in")

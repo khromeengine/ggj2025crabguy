@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://burxplar3qmqb"]
+[gd_scene load_steps=7 format=3 uid="uid://burxplar3qmqb"]
 
 [ext_resource type="PackedScene" uid="uid://clbyjtc3rk5ge" path="res://scenes/ui/main_menu.tscn" id="1_di0cl"]
 [ext_resource type="PackedScene" uid="uid://c267wk1qmclff" path="res://scenes/parallaxbg.tscn" id="2_ulki0"]
 [ext_resource type="PackedScene" uid="uid://bp3exyucvvmxr" path="res://scenes/bgm_player.tscn" id="3_v0otx"]
+[ext_resource type="Script" path="res://scripts/speedrun_timer.gd" id="4_ka1dh"]
+[ext_resource type="PackedScene" uid="uid://cfmppoc3yva8o" path="res://scenes/victory_layer.tscn" id="5_d0or1"]
+[ext_resource type="Script" path="res://scripts/resetcntr.gd" id="5_lgc12"]
 
 [node name="Main" type="Node"]
 
@@ -11,3 +14,47 @@
 [node name="ParallaxBG" parent="." instance=ExtResource("2_ulki0")]
 
 [node name="BgmPlayer" parent="." instance=ExtResource("3_v0otx")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -315.0
+offset_top = -132.0
+grow_horizontal = 0
+grow_vertical = 0
+alignment = 2
+
+[node name="Label2" type="Label" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.309804, 0.14902, 0.054902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 46
+text = "0 Resets"
+horizontal_alignment = 1
+script = ExtResource("5_lgc12")
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.309804, 0.14902, 0.054902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 46
+text = "293029302390"
+horizontal_alignment = 1
+script = ExtResource("4_ka1dh")
+active = true
+
+[node name="VictoryLayer" parent="CanvasLayer" instance=ExtResource("5_d0or1")]
+visible = false

@@ -9,11 +9,16 @@ var current_exits: Array[LevelExit]
 
 func _ready() -> void:
 	entered_new_level.connect(_on_entered_new_level)
+	GameStateManager.end_game.connect(_on_end_game)
 
 
 func set_new_level(level: LevelBase) -> void:
 	current_level = level
 	current_exits = level.exits
+	
+	for key in loaded_levels.keys():
+		if level.id != loaded_levels[key].id:
+			tick_level(loaded_levels[key].id)
 	
 	level.unload_count = level.MAX_UNLOAD_COUNT
 	
@@ -22,18 +27,21 @@ func set_new_level(level: LevelBase) -> void:
 		
 	activate_level(level)
 	
-	for key in loaded_levels.keys():
-		if level.id != loaded_levels[key].id:
-			tick_level(loaded_levels[key].id)
+	print(loaded_levels.keys())
+	
+			
 	
 		
 func tick_level(id: int) -> void:
+	print("ticking ", id)
 	if loaded_levels.has(id):
 		var level = loaded_levels[id] as LevelBase
 		level.unload_count -= 1
 		if level.unload_count == 0:
 			level.die()
+			print("unloading ", level, " id ", id)
 			loaded_levels.erase(id)
+			
 			
 	
 
@@ -67,3 +75,7 @@ func _on_entered_new_level(levelid: int, exit: int) -> void:
 	var level = get_level(levelid)
 	set_new_level(level)
 	
+
+func _on_end_game():
+	for key in loaded_levels.keys():
+		tick_level(loaded_levels[key].id)

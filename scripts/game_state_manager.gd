@@ -3,6 +3,9 @@ extends Node
 signal set_respawn_point(respawn_point: Node2D)
 signal enter_exit(entrance_position: Node2D, exit_id: Node2D)
 signal reload_level
+signal deded
+signal start_game
+signal end_game
 
 var player: Player
 var respawn_point: Vector2 = Vector2.ZERO

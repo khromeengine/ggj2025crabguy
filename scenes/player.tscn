@@ -12,7 +12,7 @@
 [ext_resource type="AudioStream" uid="uid://bl0aiu40duths" path="res://assets/sounds/437204__straget__waves-at-shetland-islands-22.wav" id="10_jul70"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_665ya"]
-size = Vector2(38, 35)
+size = Vector2(28, 31)
 
 [sub_resource type="Animation" id="Animation_ejtlb"]
 length = 0.001
@@ -205,7 +205,7 @@ transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition
 graph_offset = Vector2(0, -65.4713)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x4s8w"]
-size = Vector2(33, 28)
+size = Vector2(21, 28)
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_8cfk7"]
 random_pitch = 1.1
@@ -220,6 +220,7 @@ stream_0/stream = ExtResource("8_fpitb")
 
 [node name="Player" type="CharacterBody2D"]
 z_index = 2
+texture_filter = 3
 script = ExtResource("1_t2yg1")
 
 [node name="CrabSprite" type="Sprite2D" parent="."]
@@ -229,7 +230,7 @@ texture = ExtResource("2_dkfow")
 hframes = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 0.5)
+position = Vector2(0, 2.5)
 shape = SubResource("RectangleShape2D_665ya")
 
 [node name="BubbleSprite" type="Sprite2D" parent="."]

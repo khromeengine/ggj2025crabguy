@@ -15,9 +15,11 @@ func _on_start_pressed() -> void:
 	var player = load("res://scenes/player.tscn").instantiate()
 	add_sibling(player)
 	GameStateManager.set_respawn_point.emit(level.default_respawn)
+	GameStateManager.start_game.emit()
 	player.global_position = GameStateManager.respawn_point
 	queue_free()
 
 
 func _on_exit_pressed() -> void:
-	LevelManager.tick_level(0)
+	get_tree().quit()
+	
